@@ -5,6 +5,7 @@ public class Main {
         Client client = new Client("D:\\Documents\\IntelliJ\\Ozone\\files\\client");
         client.connect("localhost",8080);
         client.newFile("\\folder\\test.txt");
-        client.disconnect();
+        while(true){}
+        //client.disconnect();
     }
 }

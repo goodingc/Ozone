@@ -26,13 +26,18 @@ public class Server {
         }
     }
 
-    public void newFile(String path){
+    public void newFile(String path, ClientHandler origin){
         File file = new File(contentRoot + path);
         file.getParentFile().mkdirs();
         try {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (ClientHandler c: handlers){
+            if(c!=origin){
+                c.send("newFile?"+path);
+            }
         }
     }
 

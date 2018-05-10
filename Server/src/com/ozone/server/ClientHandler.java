@@ -35,13 +35,21 @@ public class ClientHandler extends Thread{
                 String[] args = message.split("\\?")[1].split(",");
                 switch (op){
                     case "newFile":
-                        server.newFile(args[0]);
+                        server.newFile(args[0], this);
+                        break;
                 }
             }
-            System.out.println("Closing");
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("["+client.getInetAddress()+" disconnected]");
+    }
+
+    public void send(String message){
+        try {
+            outStream.writeBytes(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

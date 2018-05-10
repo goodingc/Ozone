@@ -8,6 +8,7 @@ public class Client {
     Socket server;
     DataOutputStream outStream;
     BufferedReader inStream;
+    Reciever reciever;
 
     public Client(String contentRoot) {
         this.contentRoot = contentRoot;
@@ -17,10 +18,11 @@ public class Client {
         try {
             server = new Socket(serverAddress, port);
             outStream = new DataOutputStream(server.getOutputStream());
-            inStream = new BufferedReader(new InputStreamReader(server.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        reciever = new Reciever(server, this);
+        reciever.start();
     }
 
     public void disconnect(){
@@ -39,14 +41,18 @@ public class Client {
         }
     }
 
-    public void newFile(String path){
+    public void newFile(String path, boolean origin){
         File file = new File(contentRoot+path);
         try {
             file.getParentFile().mkdirs();
             file.createNewFile();
-            send("newFile?"+path);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(origin){
+            send("newFile?"+path);
+        }
     }
+
+    public void newFile(String path){newFile(path, true);}
 }
